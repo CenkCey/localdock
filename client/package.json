@@ -1,0 +1,30 @@
+{
+  "name": "localdock-client",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "ios": "vite build && cap sync ios && cap open ios",
+    "test": "node test/protocol.test.mjs && node test/logic.test.mjs && node test/client.test.mjs",
+    "fake": "node test/fakeServer.mjs"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.6.0",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "lucide-react": "^1.70.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "socket.io-client": "^4.8.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "express": "^5.3.0",
+    "socket.io": "^4.8.4",
+    "vite": "^8.3.7"
+  }
+}

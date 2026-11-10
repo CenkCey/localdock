@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LocalDock</title>
+<style>
+:root{--bg:#e4e7df;--card:#f7f8f4;--ink:#171a16;--mute:#6b7168;--line:#d3d7cc;--acc:#2b6b4a;--accSoft:#dcebe2;--warn:#b3402a}
+*{box-sizing:border-box;margin:0}
+body{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{width:min(460px,100%);display:grid;gap:14px}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 4px}
+h1{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.live{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mute)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mute)}
+.live.on .dot{background:var(--acc);box-shadow:0 0 0 4px var(--accSoft)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+.label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.big{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.val{font:600 30px/1.1 ui-monospace,"Cascadia Mono",Consolas,monospace;letter-spacing:.02em;word-break:break-all}
+.pin{letter-spacing:.18em;font-size:38px}
+button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff;transition:transform .12s,opacity .12s}
+button:active{transform:scale(.97)}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button.danger{background:transparent;color:var(--warn);border:1px solid var(--line)}
+button:disabled{opacity:.4;cursor:default}
+ul{list-style:none;padding:0;display:grid;gap:8px}
+li{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:14px}
+li span:last-child{color:var(--mute);font-size:13px}
+.empty{color:var(--mute);font-size:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hint{font-size:13px;color:var(--mute);padding:0 4px}
+.off{text-align:center;color:var(--warn);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1 id="name">LocalDock</h1>
+<div class="live" id="live"><span class="dot"></span><span id="liveText">…</span></div>
+</header>
+<section class="card">
+<div class="label" data-t="address"></div>
+<div class="big"><div class="val" id="addr">—</div><button class="ghost" data-copy="addr" data-t="copy"></button></div>
+</section>
+<section class="card">
+<div class="label">PIN</div>
+<div class="big"><div class="val pin" id="pin">······</div><button class="ghost" data-copy="pin" data-t="copy"></button></div>
+</section>
+<section class="card">
+<div class="label" data-t="connected"></div>
+<ul id="devices"></ul>
+<div class="empty" id="none" data-t="none"></div>
+</section>
+<section class="card row">
+<div><div class="label" style="margin:0 0 2px" data-t="trustedLabel"></div><div id="trusted">0</div></div>
+<button class="danger" id="revoke" data-t="revoke"></button>
+</section>
+<p class="hint" data-t="hint"></p>
+<p class="off" id="off" data-t="off" hidden></p>
+</main>
+<script>
+const I18N = {
+  en: {
+    address: 'Address', copy: 'Copy', copied: 'Copied', connected: 'Connected devices',
+    none: 'No device connected.', trustedLabel: 'Trusted devices', revoke: 'Revoke all',
+    hint: 'Your iPhone must be on the same Wi-Fi network. Enter the address on the phone, then the PIN. Later connections do not ask for the PIN.',
+    off: 'Cannot reach the server. It may have been stopped.',
+    ready: 'Ready', closed: 'Stopped', connectedN: (n) => n + ' connected',
+    devices: (n) => n + (n === 1 ? ' device' : ' devices'),
+    now: 'now', min: 'min', hour: 'h',
+    confirm: 'Revoke all trusted devices and disconnect everything that is connected?'
+  },
+  tr: {
+    address: 'Adres', copy: 'Kopyala', copied: 'Kopyalandı', connected: 'Bağlı cihazlar',
+    none: 'Şu an bağlı cihaz yok.', trustedLabel: 'Güvenilen cihazlar', revoke: 'Hepsini çıkar',
+    hint: "iPhone ile aynı Wi-Fi ağında olmalısın. Telefonda adresi gir, PIN'i yaz; sonraki bağlantılar PIN istemez.",
+    off: 'Sunucuya ulaşılamıyor. Sunucu durdurulmuş olabilir.',
+    ready: 'Hazır', closed: 'Kapalı', connectedN: (n) => n + ' bağlı',
+    devices: (n) => n + ' cihaz',
+    now: 'şimdi', min: 'dk', hour: 'sa',
+    confirm: 'Tüm güvenilen cihazlar çıkarılsın ve bağlı cihazların bağlantısı kesilsin mi?'
+  }
+};
+const T = I18N[(navigator.language || 'en').toLowerCase().startsWith('tr') ? 'tr' : 'en'];
+document.documentElement.lang = T === I18N.tr ? 'tr' : 'en';
+document.querySelectorAll('[data-t]').forEach((el) => (el.textContent = T[el.dataset.t]));
+const $ = (id) => document.getElementById(id);
+$('liveText').textContent = T.closed;
+let state = null;
+
+function ago(ts) {
+  const m = Math.max(0, Math.round((Date.now() - ts) / 60000));
+  if (m < 1) return T.now;
+  if (m < 60) return m + ' ' + T.min;
+  return Math.floor(m / 60) + ' ' + T.hour + ' ' + (m % 60) + ' ' + T.min;
+}
+
+function render(s) {
+  state = s;
+  $('name').textContent = s.name;
+  $('addr').textContent = s.address || '—';
+  $('pin').textContent = s.pin;
+  $('trusted').textContent = T.devices(s.trusted);
+  $('revoke').disabled = s.trusted === 0 && s.devices.length === 0;
+  const list = $('devices');
+  list.innerHTML = '';
+  for (const d of s.devices) {
+    const li = document.createElement('li');
+    const a = document.createElement('span');
+    a.textContent = d.ip;
+    const b = document.createElement('span');
+    b.textContent = ago(d.since);
+    li.append(a, b);
+    list.append(li);
+  }
+  $('none').hidden = s.devices.length > 0;
+  $('live').classList.toggle('on', s.devices.length > 0);
+  $('liveText').textContent = s.devices.length > 0 ? T.connectedN(s.devices.length) : T.ready;
+  $('off').hidden = true;
+}
+
+async function poll() {
+  try {
+    const r = await fetch('/panel/api/state', { cache: 'no-store' });
+    if (!r.ok) throw new Error();
+    render(await r.json());
+  } catch (e) {
+    $('off').hidden = false;
+    $('live').classList.remove('on');
+    $('liveText').textContent = T.closed;
+  }
+}
+
+document.querySelectorAll('[data-copy]').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const text = $(btn.dataset.copy).textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = T.copied;
+      setTimeout(() => (btn.textContent = T.copy), 1200);
+    } catch (e) {}
+  });
+});
+
+$('revoke').addEventListener('click', async () => {
+  if (!confirm(T.confirm)) return;
+  await fetch('/panel/api/revoke', { method: 'POST', headers: { 'X-LocalDock-Panel': '1' } });
+  poll();
+});
+
+poll();
+setInterval(poll, 2000);
+</script>
+</body>
+</html>

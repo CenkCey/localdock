@@ -1,0 +1,12 @@
+{
+  "appId": "com.localdock.app",
+  "appName": "LocalDock",
+  "webDir": "dist",
+  "backgroundColor": "#cdd0c8",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#cdd0c8",
+    "scrollEnabled": false,
+    "allowsLinkPreview": false
+  }
+}
