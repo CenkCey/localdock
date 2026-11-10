@@ -1,9 +1,14 @@
 export const DEFAULT_SETTINGS = {
-  theme: 'console',
+  theme: 'glass',
   scene: 'aurora',
   perf: false,
-  density: 8
+  density: 8,
+  labels: false,
+  immersive: false,
+  glass: 'frosted'
 };
+
+export const GLASS_STYLES = ['clear', 'frosted', 'smoked'];
 
 export const DENSITIES = [4, 6, 8];
 export const THEMES = ['console', 'glass'];
@@ -56,7 +61,10 @@ export function sanitizeSettings(input) {
     theme: THEMES.includes(source.theme) ? source.theme : DEFAULT_SETTINGS.theme,
     scene: SCENE_IDS.includes(source.scene) ? source.scene : DEFAULT_SETTINGS.scene,
     perf: source.perf === true,
-    density: DENSITIES.includes(source.density) ? source.density : DEFAULT_SETTINGS.density
+    density: DENSITIES.includes(source.density) ? source.density : DEFAULT_SETTINGS.density,
+    labels: source.labels === true,
+    immersive: source.immersive === true,
+    glass: GLASS_STYLES.includes(source.glass) ? source.glass : DEFAULT_SETTINGS.glass
   };
 }
 

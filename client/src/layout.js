@@ -130,7 +130,7 @@ export function newTile(kind, ref, label = null, idFactory = makeId) {
 }
 
 export function gridFor(density) {
-  return { cols: 2, rows: Math.ceil(density / 2) };
+  return { cols: Math.ceil(density / 2), rows: 2 };
 }
 
 export function basename(path) {

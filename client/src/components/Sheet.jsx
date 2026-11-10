@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useSwipe } from '../hooks.js';
 
-export default function Sheet({ title, onClose, side = 'bottom', tall = false, children }) {
+export default function Sheet({ title, onClose, side = 'bottom', tall = false, bare = false, cols = false, children }) {
   const ref = useRef(null);
   const swipe = useSwipe(side === 'bottom' ? { onDown: onClose } : { onUp: onClose });
 
@@ -21,6 +21,10 @@ export default function Sheet({ title, onClose, side = 'bottom', tall = false, c
     </div>
   );
 
+  const classes = ['sheet', `sheet-from-${side}`, tall ? 'tall' : '', bare ? 'bare' : '', cols ? 'cols' : '']
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <div
       className={`overlay overlay-${side}`}
@@ -28,14 +32,7 @@ export default function Sheet({ title, onClose, side = 'bottom', tall = false, c
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div
-        ref={ref}
-        tabIndex={-1}
-        className={`sheet sheet-from-${side}${tall ? ' tall' : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-      >
+      <div ref={ref} tabIndex={-1} className={classes} role="dialog" aria-modal="true" aria-label={title}>
         {side === 'bottom' && grabber}
         <div className="sheet-top">
           <h2 className="sheet-title">{title}</h2>

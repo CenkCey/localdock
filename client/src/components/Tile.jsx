@@ -6,10 +6,12 @@ import { iconUrl } from '../protocol.js';
 import { tileLabel, tileIcon, tileTone } from '../tileMeta.js';
 import { tap } from '../haptics.js';
 
-export function AppIcon({ appId, size = '100%' }) {
+const SYSTEM_ICONS = new Set(['OPEN_CMD', 'OPEN_CALC', 'OPEN_TASKMGR']);
+
+export function AppIcon({ appId }) {
   const { state } = useDockContext();
   const [broken, setBroken] = useState(false);
-  if (broken || !state.httpBase || !state.httpKey) return <AppWindow size={size} strokeWidth={2} />;
+  if (broken || !state.httpBase || !state.httpKey) return <AppWindow size="100%" strokeWidth={2} />;
   return (
     <img
       className="app-img"
@@ -22,15 +24,43 @@ export function AppIcon({ appId, size = '100%' }) {
   );
 }
 
-export function TileFace({ tile }) {
+function Glyph({ tile }) {
   const Icon = tileIcon(tile);
-  const label = tileLabel(tile);
   return (
-    <span className={`cap tone-${tileTone(tile)}${tile.kind === 'app' ? ' app' : ''}`}>
+    <span className={`glyph g-${tileTone(tile)}`}>
+      <Icon strokeWidth={2} />
+    </span>
+  );
+}
+
+function SystemIcon({ tile }) {
+  const { state } = useDockContext();
+  const [broken, setBroken] = useState(false);
+  if (broken || !state.httpBase || !state.httpKey) return <Glyph tile={tile} />;
+  return (
+    <img
+      className="app-img"
+      src={iconUrl(state.httpBase, state.httpKey, tile.ref)}
+      alt=""
+      draggable={false}
+      onError={() => setBroken(true)}
+    />
+  );
+}
+
+function Face({ tile }) {
+  if (tile.kind === 'app') return <AppIcon appId={tile.ref} />;
+  if (tile.kind === 'action' && SYSTEM_ICONS.has(tile.ref)) return <SystemIcon tile={tile} />;
+  return <Glyph tile={tile} />;
+}
+
+export function TileFace({ tile }) {
+  return (
+    <span className="face">
       <span className="tile-icon">
-        {tile.kind === 'app' ? <AppIcon appId={tile.ref} /> : <Icon size="100%" strokeWidth={2} />}
+        <Face tile={tile} />
       </span>
-      <span className="cap-label">{label}</span>
+      <span className="tile-name">{tileLabel(tile)}</span>
     </span>
   );
 }
@@ -44,7 +74,7 @@ export default function Tile({ tile, index, onEdit }) {
   });
   const isBusy = Boolean(busy) && busy.key === tile.id;
   const failed = Boolean(message) && message.bad && message.key === tile.id && !busy;
-  const className = ['key', 'tile', isBusy ? 'busy' : '', failed ? 'failed' : ''].filter(Boolean).join(' ');
+  const className = ['tile', isBusy ? 'busy' : '', failed ? 'failed' : ''].filter(Boolean).join(' ');
 
   return (
     <button

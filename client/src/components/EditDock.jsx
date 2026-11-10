@@ -193,7 +193,7 @@ export default function EditDock({ initial, startPage, density, onDone, onCancel
               <div
                 key={tile.id}
                 data-cell
-                className={`key tile editing${dragging ? ' dragging' : ''}`}
+                className={`tile editing${dragging ? ' dragging' : ''}`}
                 style={{
                   '--i': i,
                   transform: dragging ? `translate(${drag.x}px, ${drag.y}px) scale(1.05)` : undefined

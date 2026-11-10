@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export default function Slider({ label, value, onSend, interval = 100 }) {
+export default function Slider({ label, value, onSend, interval = 100, icon = null }) {
   const [local, setLocal] = useState(null);
   const lastSent = useRef(0);
   const trailing = useRef(null);
@@ -59,7 +59,8 @@ export default function Slider({ label, value, onSend, interval = 100 }) {
   const percent = Math.max(0, Math.min(100, shown));
 
   return (
-    <div className="slider" style={{ '--pct': `${percent}%` }}>
+    <div className={icon ? 'slider pill' : 'slider'} style={{ '--pct': `${percent}%` }}>
+      {icon && <span className="slider-icon">{icon}</span>}
       <input
         type="range"
         min="0"

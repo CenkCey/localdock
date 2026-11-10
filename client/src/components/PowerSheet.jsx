@@ -26,39 +26,41 @@ export default function PowerSheet({ onClose }) {
 
   return (
     <Sheet title="Power" onClose={onClose}>
-      {actions.includes('LOCK_PC') && (
-        <button className="key wide" onClick={() => fire('LOCK_PC', 'The PC is locked.')} disabled={task.busy}>
-          <span className="cap tone-ink">
-            <Lock size={26} strokeWidth={2.25} />
-            <span className="wide-label">Lock PC</span>
-          </span>
-        </button>
-      )}
-      {actions.includes('SLEEP_PC') &&
-        (confirm ? (
-          <div className="confirm">
-            <p className="confirm-text">Put the PC to sleep? You will need to wake it at the PC before you can use this dock again.</p>
-            <div className="confirm-actions">
-              <button className="key flat" onClick={() => setConfirm(false)}>
-                <span className="cap tone-light">
-                  <span className="cap-label big">Cancel</span>
-                </span>
-              </button>
-              <button className="key flat" onClick={() => fire('SLEEP_PC', 'The PC is going to sleep.')} disabled={task.busy}>
-                <span className="cap tone-red">
-                  <span className="cap-label big">Sleep PC</span>
-                </span>
-              </button>
-            </div>
-          </div>
-        ) : (
-          <button className="key wide" onClick={() => setConfirm(true)} disabled={task.busy}>
-            <span className="cap tone-red">
-              <Moon size={26} strokeWidth={2.25} />
-              <span className="wide-label">Sleep PC</span>
+      <div className="action-grid">
+        {actions.includes('LOCK_PC') && (
+          <button className="action-card" onClick={() => fire('LOCK_PC', 'The PC is locked.')} disabled={task.busy}>
+            <span className="action-ic">
+              <Lock size={24} strokeWidth={2.25} />
+            </span>
+            <span>
+              <span className="action-title">Lock PC</span>
+              <span className="action-hint">Show the sign-in screen</span>
             </span>
           </button>
-        ))}
+        )}
+        {actions.includes('SLEEP_PC') && (
+          <button className="action-card red" onClick={() => setConfirm(true)} disabled={task.busy}>
+            <span className="action-ic">
+              <Moon size={24} strokeWidth={2.25} />
+            </span>
+            <span>
+              <span className="action-title">Sleep PC</span>
+              <span className="action-hint">Wake it at the PC to use the dock again</span>
+            </span>
+          </button>
+        )}
+      </div>
+      {confirm && (
+        <div className="confirm" role="alertdialog">
+          <p>Put the PC to sleep? You will need to wake it at the PC before you can use this dock again.</p>
+          <div className="confirm-actions">
+            <button onClick={() => setConfirm(false)}>Cancel</button>
+            <button className="red" onClick={() => fire('SLEEP_PC', 'The PC is going to sleep.')} disabled={task.busy}>
+              Sleep PC
+            </button>
+          </div>
+        </div>
+      )}
       {note && (
         <p className="result" role="status">
           {note}

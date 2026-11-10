@@ -9,8 +9,7 @@ const WIDTH = 1600;
 const HEIGHT = 600;
 const INKS = [
   { id: 'black', label: 'Black', color: '#111111' },
-  { id: 'blue', label: 'Blue', color: '#1d3fd1' },
-  { id: 'red', label: 'Red', color: '#d3281c' }
+  { id: 'blue', label: 'Blue', color: '#1d3fd1' }
 ];
 
 function paint(canvas, strokes) {
@@ -128,6 +127,23 @@ export default function Signature() {
 
   return (
     <div className="signature">
+      <div className="sign-wrap">
+        <canvas
+          ref={canvasRef}
+          className="sign-canvas"
+          width={WIDTH}
+          height={HEIGHT}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerEnd}
+          onPointerCancel={onPointerEnd}
+          role="img"
+          aria-label="Signature area. Draw with your finger."
+        />
+        {empty && <p className="sign-hint">Make your mark.</p>}
+      </div>
+
+      <div className="sign-side">
       <div className="inks" role="radiogroup" aria-label="Ink colour">
         {INKS.map((i) => (
           <button
@@ -144,22 +160,6 @@ export default function Signature() {
             {i.label}
           </button>
         ))}
-      </div>
-
-      <div className="sign-wrap">
-        <canvas
-          ref={canvasRef}
-          className="sign-canvas"
-          width={WIDTH}
-          height={HEIGHT}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerEnd}
-          onPointerCancel={onPointerEnd}
-          role="img"
-          aria-label="Signature area. Draw with your finger."
-        />
-        {empty && <p className="sign-hint">Sign here with your finger</p>}
       </div>
 
       <div className="sign-tools">
@@ -186,6 +186,7 @@ export default function Signature() {
       <p className={done && !done.startsWith('Saved') && !done.startsWith('Inserted') ? 'result bad' : 'result'} role="status">
         {task.busy ? 'Sending to the PC' : done || 'Insert pastes the signature into the window you have open on the PC.'}
       </p>
+      </div>
     </div>
   );
 }

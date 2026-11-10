@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Camera } from 'lucide-react';
+import { Camera, Video } from 'lucide-react';
 import Sheet from './Sheet.jsx';
 import { useDockContext } from '../DockContext.js';
 import { useTask } from '../hooks.js';
@@ -22,13 +22,26 @@ export default function CaptureSheet({ onClose }) {
 
   return (
     <Sheet title="Capture" onClose={onClose}>
-      <button className="key wide" onClick={capture} disabled={task.busy}>
-        <span className="cap tone-cobalt">
-          <Camera size={26} strokeWidth={2.25} />
-          <span className="wide-label">{task.busy ? 'Capturing' : 'Screenshot'}</span>
-        </span>
-      </button>
-      <p className="field-note">Takes a full screenshot of the PC screen.</p>
+      <div className="action-grid">
+        <button className="action-card" onClick={capture} disabled={task.busy}>
+          <span className="action-ic">
+            <Camera size={24} strokeWidth={2.25} />
+          </span>
+          <span>
+            <span className="action-title">{task.busy ? 'Capturing' : 'Screenshot'}</span>
+            <span className="action-hint">Full resolution PNG of the PC screen</span>
+          </span>
+        </button>
+        <button className="action-card" disabled aria-disabled="true">
+          <span className="action-ic">
+            <Video size={24} strokeWidth={2.25} />
+          </span>
+          <span>
+            <span className="action-title">Start recording</span>
+            <span className="action-hint">Screen recording arrives with a server update</span>
+          </span>
+        </button>
+      </div>
       {error && (
         <p className="result bad" role="alert">
           {error}

@@ -28,6 +28,10 @@ The repository does not contain any signing identity. In Xcode:
 
 Keep `appId` in `client/capacitor.config.json` in step with your bundle identifier if you change it there.
 
+## Orientation
+
+The app is designed for landscape and locks to it. If you hold the phone upright it asks you to rotate.
+
 ## Local network permission
 
 On first launch iOS asks for access to the local network. Allow it, otherwise the phone cannot reach the PC.

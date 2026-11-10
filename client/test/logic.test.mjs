@@ -65,8 +65,8 @@ assert.deepStrictEqual(rechunk([{ id: 'p1', tiles: [] }], 4).map((p) => p.tiles.
 assert.deepStrictEqual(rechunk([], 4), [{ id: 'p1', tiles: [] }]);
 
 assert.deepStrictEqual(gridFor(4), { cols: 2, rows: 2 });
-assert.deepStrictEqual(gridFor(6), { cols: 2, rows: 3 });
-assert.deepStrictEqual(gridFor(8), { cols: 2, rows: 4 });
+assert.deepStrictEqual(gridFor(6), { cols: 3, rows: 2 });
+assert.deepStrictEqual(gridFor(8), { cols: 4, rows: 2 });
 
 assert.deepStrictEqual(normalizeLayout(null).pages.length, 1);
 assert.deepStrictEqual(normalizeLayout({ pages: [] }).pages.length, 1);
@@ -181,19 +181,26 @@ const broken = {
 useStorage(broken);
 assert.deepStrictEqual(loadPcs(), []);
 assert.doesNotThrow(() => savePcs([{ address: 'a:1' }]));
-assert.doesNotThrow(() => saveSettings({ theme: 'glass' }));
-assert.strictEqual(loadSettings().theme, 'console');
+assert.doesNotThrow(() => saveSettings({ theme: 'console' }));
+assert.strictEqual(loadSettings().theme, 'glass');
 
 useStorage(memory());
-assert.deepStrictEqual(loadSettings(), { theme: 'console', scene: 'aurora', perf: false, density: 8 });
-saveSettings({ theme: 'glass', scene: 'ember', perf: true, density: 6 });
-assert.deepStrictEqual(loadSettings(), { theme: 'glass', scene: 'ember', perf: true, density: 6 });
-assert.deepStrictEqual(sanitizeSettings({ theme: 'neon', scene: 'x', perf: 'yes', density: 5 }), {
+const defaults = { theme: 'glass', scene: 'aurora', perf: false, density: 8, labels: false, immersive: false, glass: 'frosted' };
+assert.deepStrictEqual(loadSettings(), defaults);
+saveSettings({ theme: 'console', scene: 'ember', perf: true, density: 6, labels: true, immersive: true, glass: 'smoked' });
+assert.deepStrictEqual(loadSettings(), {
   theme: 'console',
-  scene: 'aurora',
-  perf: false,
-  density: 8
+  scene: 'ember',
+  perf: true,
+  density: 6,
+  labels: true,
+  immersive: true,
+  glass: 'smoked'
 });
+assert.deepStrictEqual(
+  sanitizeSettings({ theme: 'neon', scene: 'x', perf: 'yes', density: 5, labels: 'yes', immersive: 1, glass: 'mirror' }),
+  defaults
+);
 useStorage(null);
 
 const accel = accelerate(1, 0);

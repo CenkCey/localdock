@@ -20,27 +20,39 @@ Tap a key, your PC does it. Local network only, PIN paired, no cloud.
 
 LocalDock turns an iPhone into a customizable control surface for a Windows PC. Think of a hardware macro pad, but made of glass and software. Launch apps, control volume and media, move the mouse, type, share the clipboard, take screenshots and send files, all over your own Wi-Fi.
 
-- **Dock of keys.** Launch any installed app (including Microsoft Store apps), open folders and links, run built-in actions. Multiple pages, drag to reorder, 4, 6 or 8 keys per page.
+- **Dock of keys.** Launch any installed app (including Microsoft Store apps), open folders and links, run built-in actions. Multiple pages, reorder or remove keys, 4, 6 or 8 keys per page. Built for landscape.
 - **Quick controls.** Volume, brightness, media transport and now-playing info on the dock header.
-- **Touchpad and keyboard.** Mouse, scroll, zoom and typing from the phone.
+- **Touchpad and keyboard.** Mouse, two finger scroll, pinch to zoom, drag, PC shortcut keys and typing from the phone.
 - **Clipboard, files, capture.** Push text to the PC clipboard, upload files, grab a screenshot or send a handwritten signature.
-- **Two looks.** A tactile "Console" theme and a "Glass" theme with eight backgrounds.
+- **Glass design.** Eight backgrounds, clear, frosted or smoked glass, optional immersive and performance modes.
 - **Windows tray app.** Shows the address and PIN, lists connected phones, revokes trust, starts with Windows.
 - **Private by design.** Works on the local network only. A PIN pairs a phone once, afterwards a revocable token is used. See [SECURITY.md](SECURITY.md).
 
 ## Screenshots
 
-| Connect | Pair with PIN | Dock |
-|:--:|:--:|:--:|
-| <img src="docs/assets/connect.png" width="220"> | <img src="docs/assets/pin.png" width="220"> | <img src="docs/assets/dock.png" width="220"> |
+| Connect | Pair with PIN |
+|:--:|:--:|
+| <img src="docs/assets/connect.png" width="420"> | <img src="docs/assets/pin.png" width="420"> |
 
-| Quick controls | Menu | Edit dock |
-|:--:|:--:|:--:|
-| <img src="docs/assets/quick-controls.png" width="220"> | <img src="docs/assets/menu.png" width="220"> | <img src="docs/assets/edit-dock.png" width="220"> |
+| Dock | Second page |
+|:--:|:--:|
+| <img src="docs/assets/dock.png" width="420"> | <img src="docs/assets/dock-page2.png" width="420"> |
 
-| Appearance | Glass: Aurora | Glass: Dusk |
-|:--:|:--:|:--:|
-| <img src="docs/assets/appearance.png" width="220"> | <img src="docs/assets/glass-aurora.png" width="220"> | <img src="docs/assets/glass-dusk.png" width="220"> |
+| Quick controls | Touchpad |
+|:--:|:--:|
+| <img src="docs/assets/quick-controls.png" width="420"> | <img src="docs/assets/touchpad.png" width="420"> |
+
+| Menu | Add to dock |
+|:--:|:--:|
+| <img src="docs/assets/menu.png" width="420"> | <img src="docs/assets/add-to-dock.png" width="420"> |
+
+| Appearance | Edit dock |
+|:--:|:--:|
+| <img src="docs/assets/appearance.png" width="420"> | <img src="docs/assets/edit-dock.png" width="420"> |
+
+| Scene: Dusk | Scene: Midnight |
+|:--:|:--:|
+| <img src="docs/assets/scene-dusk.png" width="420"> | <img src="docs/assets/scene-midnight.png" width="420"> |
 
 **Windows tray panel**
 
@@ -93,7 +105,7 @@ In Xcode, open the **App** target, set your own **Team** and a unique **Bundle I
 
 ### 3. Connect
 
-Phone and PC must be on the same Wi-Fi. Enter the address shown in the PC panel, then the PIN. Later connections need no PIN.
+Phone and PC must be on the same Wi-Fi. Hold the phone in landscape, enter the address shown in the PC panel, then the PIN. Later connections need no PIN.
 
 ## Using LocalDock
 
@@ -101,10 +113,11 @@ Phone and PC must be on the same Wi-Fi. Enter the address shown in the PC panel,
 |---|---|
 | Tap a key | Runs the action or opens the app on the PC |
 | Swipe the dock | Next page |
-| Tap the handle at the bottom | Quick controls (volume, brightness, media, files, touchpad, capture, clipboard, power) |
-| Menu, then Apps | Add apps, folders, links or built-in actions |
+| Tap the media bar at the top | Quick controls: volume, brightness, media, files, touchpad, capture, power |
+| Tap the handle at the bottom | Menu: add to dock, appearance, edit dock, switch PC |
+| Menu, then Add to dock | Add apps, folders, built-in controls or links |
 | Menu, then Edit dock | Reorder, remove, add pages |
-| Menu, then Appearance | Console or Glass theme, background, keys per page |
+| Menu, then Appearance | Background, glass style, keys per page, app names, immersive and performance modes |
 
 Power actions (shutdown, restart) ask for confirmation first.
 

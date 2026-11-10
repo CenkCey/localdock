@@ -17,9 +17,9 @@ LocalDock, iPhone'u Windows bilgisayar için özelleştirilebilir bir kontrol y�
 
 - **Tuş dock'u.** Kurulu her uygulamayı (Microsoft Store dahil), klasörleri ve bağlantıları aç, hazır eylemleri çalıştır. Çok sayfa, sürükleyerek sıralama, sayfa başına 4, 6 veya 8 tuş.
 - **Hızlı kontroller.** Ses, parlaklık, medya kontrolü ve çalan parça bilgisi.
-- **Touchpad ve klavye.** Fare, kaydırma, yakınlaştırma ve yazma.
+- **Touchpad ve klavye.** Fare, iki parmakla kaydırma, kıstırarak yakınlaştırma, sürükleme, PC kısayol tuşları ve yazma.
 - **Pano, dosya, ekran.** Metni PC panosuna gönder, dosya yükle, ekran görüntüsü al, imza gönder.
-- **İki görünüm.** Dokunsal "Console" ve sekiz arka planlı "Glass" teması.
+- **Cam tasarım.** Sekiz arka plan, şeffaf, buzlu veya füme cam, isteğe bağlı sürükleyici ve performans modu.
 - **Windows tepsi uygulaması.** Adresi ve PIN'i gösterir, bağlı telefonları listeler, güveni iptal eder, Windows ile açılır.
 - **Gizlilik odaklı.** Yalnızca yerel ağda çalışır. Telefon PIN ile bir kez eşleşir, sonra iptal edilebilir bir token kullanılır. Bkz. [SECURITY.md](SECURITY.md).
 
@@ -58,7 +58,7 @@ Xcode'da **App** hedefinde *Signing & Capabilities* altında kendi **Team** değ
 
 ### 3. Bağlan
 
-Telefon ve PC aynı Wi-Fi'da olmalı. PC panelindeki adresi, sonra PIN'i gir. Sonraki bağlantılar PIN istemez.
+Telefon ve PC aynı Wi-Fi'da olmalı. Telefonu yatay tut, PC panelindeki adresi, sonra PIN'i gir. Sonraki bağlantılar PIN istemez.
 
 ## Geliştirme
 

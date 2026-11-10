@@ -79,3 +79,21 @@ export const PC_KEYS = [
   { key: 'down', label: 'Down', icon: 'down' },
   { key: 'right', label: 'Right', icon: 'right' }
 ];
+
+export function createZoomer(send, step = 30) {
+  let acc = 0;
+
+  function add(delta) {
+    acc += delta / step;
+    const notches = Math.trunc(acc);
+    if (notches === 0) return;
+    acc -= notches;
+    send({ type: 'zoom', dy: clamp(-notches, 10) });
+  }
+
+  function reset() {
+    acc = 0;
+  }
+
+  return { add, reset };
+}

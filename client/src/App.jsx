@@ -5,6 +5,7 @@ import ConnectScreen from './components/ConnectScreen.jsx';
 import PinModal from './components/PinModal.jsx';
 import Dock from './components/Dock.jsx';
 import SceneBackground from './components/SceneBackground.jsx';
+import RotatePrompt from './components/RotatePrompt.jsx';
 import { errorText } from './protocol.js';
 
 export default function App() {
@@ -15,8 +16,13 @@ export default function App() {
 
   return (
     <DockContext.Provider value={value}>
-      <div className="app">
-        {settings.theme === 'glass' && <SceneBackground scene={settings.scene} />}
+      <div
+        className="app"
+        data-labels={settings.labels ? 'on' : 'off'}
+        data-immersive={settings.immersive ? 'on' : 'off'}
+        data-glass={settings.glass}
+      >
+        <SceneBackground scene={settings.scene} />
         {state.status === 'ready' ? <Dock /> : <ConnectScreen dock={dock} />}
         {state.status === 'pin' && (
           <PinModal
@@ -31,6 +37,7 @@ export default function App() {
             onCancel={dock.disconnect}
           />
         )}
+        <RotatePrompt />
       </div>
     </DockContext.Provider>
   );
